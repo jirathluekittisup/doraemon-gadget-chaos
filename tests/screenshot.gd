@@ -77,7 +77,8 @@ func _settle(n: int) -> void:
 
 func _shot(path: String) -> void:
 	var img := get_viewport().get_texture().get_image()
-	if get_viewport().use_hdr_2d:
+	# An HDR viewport hands back linear float data; the Compatibility renderer gives sRGB bytes.
+	if img.get_format() in [Image.FORMAT_RGBAH, Image.FORMAT_RGBAF, Image.FORMAT_RGBH, Image.FORMAT_RGBF]:
 		img.convert(Image.FORMAT_RGBA8)
 		img.linear_to_srgb()
 	img.save_png(path)
